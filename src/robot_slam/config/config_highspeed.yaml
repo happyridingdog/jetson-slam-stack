@@ -1,0 +1,54 @@
+laser_mapping:
+  ros__parameters:
+    feature_extract_enable: false
+    point_filter_num: 2
+    max_iteration: 3
+    filter_size_surf: 0.20
+    filter_size_map: 0.30
+    cube_side_length: 300.0
+    common:
+        lid_topic:  "/livox/lidar"
+        imu_topic:  "/livox/imu"
+        auto_start: true
+        time_sync_en: false
+        time_offset_lidar_to_imu: 0.0
+    preprocess:
+        lidar_type: 1
+        scan_line: 4
+        blind: 0.35
+        timestamp_unit: 3
+        scan_rate: 10
+    mapping:
+        # Slightly looser inertial process noise than the static/default
+        # profile. The dog body can excite high angular acceleration; overly
+        # tight IMU covariance makes the filter fight real motion.
+        acc_cov: 0.3
+        gyr_cov: 0.3
+        b_acc_cov: 0.0005
+        b_gyr_cov: 0.0005
+        fov_degree:    360.0
+        det_range:     60.0
+        extrinsic_est_en: false
+        extrinsic_T: [ -0.011, -0.02329, 0.04412 ]
+        extrinsic_R: [ 1., 0., 0.,
+                    0., 1., 0.,
+                    0., 0., 1.]
+    publish:
+        odom_topic: "/odom/slam_odom"
+        path_topic: "/path/slam"
+        map_frame: "map"
+        body_frame: "base_link"
+        path_en: true
+        map_en: false
+        map_record_en: true
+        map_record_max_points: 1000000
+        world_points_en: false
+        body_points_en: true
+    pcd2pgm:
+      file_name : "map"
+      thre_z_min : -0.1
+      thre_z_max : 2.0
+      flag_pass_through : 0
+      map_resolution : 0.05
+      thre_radius : 0.1
+      thres_point_count : 10

@@ -1,0 +1,113 @@
+sc_gicp_pose_graph_mapper:
+  ros__parameters:
+    input_cloud_topic: "/body_points"
+    map_cloud_topic: "/map_points_3d"
+    current_cloud_topic: "/current_cloud_3d"
+    status_topic: "/sc_gicp_pose_graph_mapper/status"
+    output_frame: "map"
+    # Same 0.60 x 0.45 m base footprint as Nav2; sensor is 0.21 m forward.
+    # Applied before keyframe, cache, archive and global-map accumulation.
+    self_filter_footprint: [-0.30, -0.225, 0.30, -0.225, 0.30, 0.225, -0.30, 0.225]
+    self_filter_base_from_sensor: [0.21, 0.0, 0.0]
+    # Keep the dense map resolution.  Runtime work is bounded by input/keyframe
+    # budgets and the map is delivered to RViz in chunks below.
+    keyframe_voxel_size_m: 0.10
+    map_voxel_size_m: 0.10
+    max_input_points: 30000
+    max_keyframe_points: 24000
+    # Zero means no global visualization truncation; chunk topics bound each
+    # ROS message while preserving all map points.
+    max_publish_points: 0
+    map_shard_count: 8
+    map_shard_points: 50000
+    max_current_points: 12000
+    # Persist at most one candidate per second; every candidate is checked.
+    insert_hz: 1.0
+    # Publish the retained map often enough for RViz to feel live.  The map
+    # remains chunked and voxelized, so this does not change its density.
+    map_publish_hz: 0.5
+    current_publish_hz: 4.0
+    min_range_m: 0.20
+    max_range_m: 60.0
+    local_radius_m: 18.0
+    min_keyframe_translation_m: 0.35
+    min_keyframe_rotation_deg: 10.0
+    max_keyframe_interval_s: 3.0
+    # The feature cloud bridge deliberately waits for the matching odometry
+    # timestamp.  Do not fuse a cloud with a stale pose: even a 0.2 s pose
+    # error produces visible ghosts when the vehicle is moving.
+    tf_timeout_s: 0.30
+    tf_use_latest_if_stamp_unavailable: false
+    tf_latest_max_age_s: 0.0
+    optimized_path_topic: "/optimized_pose_graph_path"
+    # A zero value means the check is not wall-clock throttled: every candidate
+    # is checked against a bounded spatially nearby submap before insertion.
+    registration_check_hz: 0.0
+    registration_check_min_keyframes: 5
+    registration_submap_keyframes: 20
+    registration_max_points: 12000
+    registration_voxel_size_m: 0.20
+    registration_max_fitness_score: 0.18
+    registration_max_translation_correction_m: 0.22
+    registration_max_rotation_correction_deg: 12.0
+    # A CUDA result that misses the optimizer's convergence tolerance can still
+    # correct and insert a frame when its independently measured fitness is
+    # very good. All finite-transform and correction-size gates still apply.
+    registration_accept_nonconverged_if_quality_ok: true
+    registration_nonconverged_fitness_score: 0.08
+    # CUDA residual/covariance evaluation; finite-transform and quality gates remain active.
+    registration_use_cuda: true
+    # A scan whose reference pose implies an implausible speed is kept out of
+    # the persistent map.  Odometry continues to run and later good scans can
+    # still be inserted.
+    # Disabled in the recovery profile; exact-time TF is not available from
+    # this driver without extrapolation.  Keep odometry/map behavior stable.
+    max_keyframe_linear_speed_mps: 1.0
+    max_keyframe_angular_speed_rps: 1.5
+
+    scan_context_num_rings: 20
+    scan_context_num_sectors: 60
+    scan_context_min_radius: 0.5
+    scan_context_max_radius: 40.0
+    scan_context_min_points: 80
+    scan_context_exclude_recent: 20
+    scan_context_search_candidates: 48
+    scan_context_verify_candidates: 4
+    scan_context_score_thresh: 0.22
+    scan_context_score_margin: 0.03
+
+    # Disable loop closure while the current run is being rebuilt.  The prior
+    # run accepted a false SC match (154 -> 179), which warped the whole map.
+    # Odometry factors and transactional GTSAM optimization remain active.
+    loop_min_travel_distance_m: 1000000.0
+    loop_fitness_score_thresh: 0.45
+    loop_submap_max_keyframes: 8
+    loop_submap_voxel_size_m: 0.25
+    gicp_num_threads: 2
+    # This profile has a CUDA FastVGICP build for this Jetson.
+    gicp_backend: "cuda"
+    # GPU_BRUTEFORCE is slower than RBF but is deterministic on this Jetson
+    # and avoids the intermittent RBF kernel fault seen with sparse MID360
+    # neighborhoods. It remains bounded by registration_max_points.
+    cuda_search_method: "GPU_BRUTEFORCE"
+    gicp_num_threads: 2
+    gicp_correspondence_randomness: 12
+    gicp_max_correspondence_distance: 1.5
+    gicp_maximum_iterations: 20
+    graph_optimize_period_keyframes: 15
+    graph_optimization_iterations: 6
+
+    enable_keyframe_cloud_cache: true
+    keyframe_cloud_cache_dir: "/home/jetson/.jszr/map/pose_graph_keyframes"
+    keyframe_cloud_cache_keep_recent: 240
+    keyframe_cloud_cache_cleanup_on_start: false
+    max_keyframe_clouds_in_memory: 240
+    max_archived_map_points: 1000000
+
+    save_map_on_shutdown: true
+    save_timestamped_snapshots: false
+    save_map_path: "/home/jetson/.jszr/map/pose_graph_map.ply"
+    shutdown_save_root: "/home/jetson/.jszr/map/pose_graph_snapshots"
+    latest_map_path: "/home/jetson/.jszr/map/pose_graph_map_latest.ply"
+    latest_metadata_path: "/home/jetson/.jszr/map/pose_graph_map_latest.txt"
+    latest_map_pcd_path: "/home/jetson/.jszr/map/pose_graph_map_latest.pcd"

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>lightweight_fusion_bringup</name>
+  <version>0.1.0</version>
+  <description>LiDAR-inertial pose graph mapping and global localization.</description>
+  <maintainer email="jszr@example.com">jszr</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>tf2</depend>
+  <depend>tf2_eigen</depend>
+  <depend>tf2_ros</depend>
+  <depend>fast_gicp</depend>
+  <build_depend>libpcl-all-dev</build_depend>
+  <build_depend>gtsam</build_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>super_odometry</exec_depend>
+  <exec_depend>super_odometry_msgs</exec_depend>
+  <exec_depend>robot_slam</exec_depend>
+  <exec_depend>livox_ros_driver2</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+
+  <export><build_type>ament_cmake</build_type></export>
+</package>

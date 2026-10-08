@@ -1,0 +1,82 @@
+scan_context_global_localizer:
+  ros__parameters:
+    # The mapper save service writes this atomic latest snapshot. It is the
+    # hand-off artifact from mapping mode to localization/navigation mode.
+    map_path: "/home/jetson/.jszr/map/pose_graph_map_latest.pcd"
+    cloud_topic: "/body_points"
+    map_cloud_topic: "/map_points_3d"
+    map_frame: "map"
+    odom_frame: "odom"
+    sensor_frame: "sensor"
+    base_frame: "base_link"
+    initial_pose_topic: "/initialpose"
+    # Precompute a compact Scan Context index over overlapping map tiles.
+    # Small overlapping tiles
+    # preserve spatial uniqueness; a single 25 m tile would make every place
+    # look identical to Scan Context.
+    map_tile_spacing_m: 2.0
+    tile_radius_m: 9.0
+    scan_context_max_radius_m: 9.0
+    map_z_offset_m: 0.35
+    map_ground_height_quantile: 0.05
+    scan_rate_hz: 2.0
+    scan_context_rings: 20
+    scan_context_sectors: 60
+    scan_context_min_radius_m: 0.5
+    scan_context_height_offset_m: 2.0
+    scan_context_max_height_m: 6.0
+    # The saved pose-graph snapshot is intentionally voxel-thinned.  Keep
+    # Scan Context permissive enough for that sparse hand-off, while GICP
+    # fitness and correction bounds remain the final acceptance gate.
+    # The saved SuperOdom map and Fast-LIO localization scans have different
+    # voxel/statistical density.  Runtime validation showed valid candidates
+    # in the 0.39-0.44 range; GICP remains the final acceptance gate.
+    scan_context_max_score: 0.50
+    scan_context_min_margin: 0.005
+    # Verify several Scan Context candidates and select the best GICP result;
+    # never accept the first locally converged candidate.
+    verify_candidates: 12
+    max_scan_points: 6000
+    scan_voxel_m: 0.25
+    map_voxel_m: 0.10
+    gicp_resolution_m: 0.50
+    gicp_max_correspondence_m: 2.0
+    gicp_max_fitness: 0.45
+    # Reject poorly overlapping local minima while allowing the saved-map /
+    # live-Fast-LIO density difference observed on this platform.
+    gicp_min_inlier_ratio: 0.45
+    gicp_iterations: 40
+    # Persistent CUDA engines cache map voxels/covariances across hypotheses.
+    use_cuda: true
+    cuda_search_method: "GPU_BRUTEFORCE"
+    cpu_refine_on_cuda_failure: false
+    registration_voxel_m: 0.25
+    registration_translation_epsilon_m: 0.005
+    registration_rotation_epsilon_rad: 0.005
+    registration_inlier_distance_m: 0.50
+    global_search_budget_s: 0.45
+    global_fitness_margin: 0.02
+    global_candidate_count: 128
+    global_max_fitness: 0.12
+    global_min_inlier_ratio: 0.65
+    tracking_search_radius_m: 10.0
+    correction_smoothing: 0.35
+    # Fast-LIO supplies the continuous local motion.  Map registration is a
+    # correction source, so a bad local minimum must never move map->odom by
+    # a large amount while the vehicle is stationary or moving slowly.
+    max_tracking_translation_correction_m: 0.25
+    max_tracking_rotation_correction_deg: 10.0
+    max_tracking_failures_before_global_search: 20
+    max_tracking_failures_before_lost: 60
+    # Once navigation has a confirmed map->odom, do not let a later
+    # ambiguous scan move the map frame.  RViz /initialpose is the explicit
+    # recovery path; startup still performs automatic global localization.
+    enable_automatic_global_recovery: false
+    max_global_recovery_translation_m: 0.60
+    max_global_recovery_rotation_deg: 12.0
+    # A global seed must be geometrically consistent over several fresh
+    # scans before map->odom is published.  This prevents a one-frame local
+    # minimum from moving the map frame.
+    global_confirmation_scans: 2
+    global_confirmation_translation_m: 0.80
+    global_confirmation_rotation_deg: 20.0

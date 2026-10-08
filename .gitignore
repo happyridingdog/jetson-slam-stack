@@ -1,0 +1,16 @@
+build/
+install/
+log/
+__pycache__/
+*.pyc
+*.pcd
+*.ply
+*.bag
+*.bag2
+*.db3
+*.mcap
+*.engine
+*.onnx
+*.pt
+.env
+.env.*

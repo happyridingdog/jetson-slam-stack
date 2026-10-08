@@ -1,0 +1,60 @@
+# Fast-LIO navigation profile for the MID360.
+# This profile deliberately preserves the SuperOdom-facing topics used by the
+# rest of the stack: /laser_odometry, /body_points and map->base_link TF.
+laser_mapping:
+  ros__parameters:
+    feature_extract_enable: false
+    point_filter_num: 2
+    max_iteration: 3
+    filter_size_surf: 0.20
+    filter_size_map: 0.30
+    cube_side_length: 300.0
+    common:
+      lid_topic: "/livox/lidar"
+      imu_topic: "/livox/imu"
+      auto_start: true
+      time_sync_en: false
+      time_offset_lidar_to_imu: 0.0
+    preprocess:
+      # MID360 PointCloud2 (LivoxPointXyzrtlt) input.
+      lidar_type: 1
+      scan_line: 4
+      blind: 0.35
+      timestamp_unit: 3
+      scan_rate: 10
+    mapping:
+      acc_cov: 0.3
+      gyr_cov: 0.3
+      b_acc_cov: 0.0005
+      b_gyr_cov: 0.0005
+      fov_degree: 360.0
+      det_range: 60.0
+      extrinsic_est_en: false
+      extrinsic_T: [-0.011, -0.02329, 0.04412]
+      extrinsic_R: [1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 1.0]
+    publish:
+      # Keep the established frontend interface so the predictor, pose graph,
+      # Nav2 and existing tools do not need a second topic graph.
+      odom_topic: "/laser_odometry"
+      path_topic: "/fastlio/path"
+      map_frame: "map"
+      # Keep the established lidar/body frame.  Nav2 already supplies the
+      # fixed sensor -> base_link transform (lidar is 210 mm ahead of the
+      # vehicle center).
+      body_frame: "sensor"
+      path_en: true
+      map_en: false
+      map_record_en: false
+      map_record_max_points: 1000000
+      world_points_en: false
+      body_points_en: true
+    pcd2pgm:
+      file_name: "fastlio_map"
+      thre_z_min: -0.1
+      thre_z_max: 2.0
+      flag_pass_through: 0
+      map_resolution: 0.05
+      thre_radius: 0.1
+      thres_point_count: 10

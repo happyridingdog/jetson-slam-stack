@@ -1,0 +1,249 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Map Chunk 0 1
+        - /Current Cloud1
+        - /SuperOdom Scan1
+        - /Path1
+    Tree Height: 640
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      # The compatibility full-map topic stays available to other ROS nodes.
+      # RViz renders the same dense map through bounded chunk topics below.
+      Enabled: true
+      Name: Grid
+      Plane: XY
+      Plane Cell Count: 80
+      Reference Frame: <Fixed Frame>
+      Cell Size: 1
+      Color: 120; 120; 120
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Name: TF
+      Frame Timeout: 15
+      Marker Scale: 0.4
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Update Interval: 0
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /map_points_3d/chunk_0
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 1
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_1
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 2
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_2
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 3
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_3
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 4
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_4
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 5
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_5
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 6
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_6
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      Enabled: true
+      Name: Map Chunk 7
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_points_3d/chunk_7
+      Decay Time: 0
+      Style: Flat Squares
+      Size (m): 0.014
+      Color Transformer: AxisColor
+      Axis: Z
+    - Class: rviz_default_plugins/PointCloud2
+      # The current scan remains available on /current_cloud_3d. Keeping it
+      # disabled by default avoids a second high-rate point-cloud render.
+      Enabled: false
+      Name: Current Cloud
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /current_cloud_3d
+      Decay Time: 1
+      Style: Flat Squares
+      Size (m): 0.012
+      Color Transformer: FlatColor
+      Color: 255; 190; 80
+    - Class: rviz_default_plugins/PointCloud2
+      # Keep the raw scan available as a topic, but do not render it by
+      # default: it duplicates the current/map clouds and is the main RViz
+      # CPU source on the Jetson display.
+      Enabled: false
+      Name: SuperOdom Scan
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /registered_scan
+      Decay Time: 0.5
+      Style: Flat Squares
+      Size (m): 0.015
+      Color Transformer: Intensity
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Path
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /laser_odom_path
+      Line Style: Lines
+      Line Width: 0.05
+      Color: 40; 230; 120
+      Buffer Length: 1
+    - Class: rviz_default_plugins/Path
+      Enabled: true
+      Name: Optimized Pose Graph
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /optimized_pose_graph_path
+      Line Style: Lines
+      Line Width: 0.06
+      Color: 255; 210; 40
+      Buffer Length: 1
+  Enabled: true
+  Global Options:
+    Background Color: 30; 30; 30
+    Fixed Frame: map
+    # Xrdp uses software GL on this Jetson; a low display refresh keeps RViz
+    # responsive while ROS topics continue at their normal rates.
+    Frame Rate: 3
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    # Click a target in the map and drag to set its desired heading.  The
+    # bridge node forwards this PoseStamped to Nav2's navigate_to_pose action.
+    - Class: rviz_default_plugins/SetGoal
+      Topic: /goal_pose
+      Topic QoS Durability: Volatile
+      Topic QoS History: Keep Last
+      Topic QoS Reliability: Reliable
+      Topic Queue Size: 10
+    # Set the robot pose in the saved map.  This overrides the automatic
+    # global initializer through scan_context_global_localizer.
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic: /initialpose
+      Topic QoS Durability: Volatile
+      Topic QoS History: Keep Last
+      Topic QoS Reliability: Reliable
+      Topic Queue Size: 10
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 18
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Pitch: 0.785
+      Yaw: 0.785
+      Target Frame: <Fixed Frame>
+Window Geometry:
+  Height: 900
+  Width: 1400
+  X: 80
+  Y: 80
