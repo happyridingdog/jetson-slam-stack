@@ -4,6 +4,14 @@ Source snapshot of the LiDAR-inertial mapping, odometry, pose-graph mapping,
 global localization, point-cloud navigation, and modified GPU registration code from the Jetson robot
 archive dated 2026-10-06. This is a ROS 2 source workspace, not a system image.
 
+## Field Reconstruction / 现场重建
+
+**中文：** 视频展示了江苏无锡某实际项目中配电房场地的点云三维重建成果。该场地重建将用于后续巡检机器人的部署。
+
+**English:** This video shows a 3D point-cloud reconstruction of an electrical distribution room from a real project in Wuxi, Jiangsu, China. The reconstructed site is intended to support the deployment of an inspection robot.
+
+[观看重建视频 / Watch the reconstruction video](media/wuxi-power-distribution-room-reconstruction.mp4)
+
 ## Packages
 
 | Package | Purpose |
