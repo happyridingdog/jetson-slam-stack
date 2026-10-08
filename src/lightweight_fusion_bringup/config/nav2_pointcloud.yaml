@@ -1,0 +1,328 @@
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: /nav_predicted_odom
+    default_server_timeout: 20
+    default_nav_to_pose_bt_xml: ""
+    default_nav_through_poses_bt_xml: ""
+    plugin_lib_names:
+      - stable_path_bt_nodes
+      - nav2_compute_path_to_pose_action_bt_node
+      - nav2_compute_path_through_poses_action_bt_node
+      - nav2_smooth_path_action_bt_node
+      - nav2_follow_path_action_bt_node
+      - nav2_spin_action_bt_node
+      - nav2_wait_action_bt_node
+      - nav2_assisted_teleop_action_bt_node
+      - nav2_back_up_action_bt_node
+      - nav2_drive_on_heading_bt_node
+      - nav2_clear_costmap_service_bt_node
+      - nav2_is_stuck_condition_bt_node
+      - nav2_goal_reached_condition_bt_node
+      - nav2_goal_updated_condition_bt_node
+      - nav2_globally_updated_goal_condition_bt_node
+      - nav2_is_path_valid_condition_bt_node
+      - nav2_initial_pose_received_condition_bt_node
+      - nav2_reinitialize_global_localization_service_bt_node
+      - nav2_rate_controller_bt_node
+      - nav2_distance_controller_bt_node
+      - nav2_speed_controller_bt_node
+      - nav2_truncate_path_action_bt_node
+      - nav2_truncate_path_local_action_bt_node
+      - nav2_goal_updater_node_bt_node
+      - nav2_recovery_node_bt_node
+      - nav2_pipeline_sequence_bt_node
+      - nav2_round_robin_node_bt_node
+      - nav2_transform_available_condition_bt_node
+      - nav2_time_expired_condition_bt_node
+      - nav2_path_expiring_timer_condition
+      - nav2_distance_traveled_condition_bt_node
+      - nav2_single_trigger_bt_node
+      - nav2_goal_updated_controller_bt_node
+      - nav2_is_battery_low_condition_bt_node
+      - nav2_navigate_through_poses_action_bt_node
+      - nav2_navigate_to_pose_action_bt_node
+      - nav2_remove_passed_goals_action_bt_node
+
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    # Navigation uses Fast-LIO odometry with a bounded MID360 IMU prediction.
+    # The prediction cap is 0.15 s in the TF bridge.
+    controller_frequency: 15.0
+    odom_topic: /nav_predicted_odom
+    min_x_velocity_threshold: 0.005
+    min_y_velocity_threshold: 0.005
+    min_theta_velocity_threshold: 0.01
+    failure_tolerance: 1.0
+    progress_checker_plugins: [progress_checker]
+    goal_checker_plugins: [general_goal_checker]
+    controller_plugins: [FollowPath]
+    progress_checker:
+      # Rotation counts as progress: a slow 180-degree turn can exceed 10 s.
+      plugin: nav2_controller::PoseProgressChecker
+      required_movement_radius: 0.15
+      required_movement_angle: 0.10
+      movement_time_allowance: 10.0
+    general_goal_checker:
+      plugin: nav2_controller::StoppedGoalChecker
+      stateful: true
+      xy_goal_tolerance: 0.12
+      # Require the requested heading AND settled measured motion; do not
+      # report success while still coasting through the angle tolerance.
+      yaw_goal_tolerance: 0.025
+      rot_stopped_velocity: 0.02
+      trans_stopped_velocity: 0.02
+    FollowPath:
+      # Stay within a band around the original edge; do not chase exact alignment.
+      # Cruise is pure forward; stopped corrections may combine lateral/yaw.
+      heading_correction: false
+      stopped_alignment: true
+      alignment_position_tolerance: 0.06
+      alignment_heading_tolerance: 0.05235987755982989
+      realign_cross_threshold: 0.15
+      realign_heading_threshold: 0.13962634015954636
+      alignment_lateral_speed: 0.10
+      tracking_lookahead: 0.60
+      max_tracking_yaw: 0.20
+      plugin: lightweight_fusion_bringup::ExclusiveVelocityController
+      max_linear_speed: 0.80
+      # Initial conservative vector speed floor; refine against ground tests.
+      # Small lateral corrections while moving are not individually boosted.
+      min_linear_speed: 0.10
+      max_lateral_speed: 0.30
+      max_angular_speed: 0.60
+      # IMU calibration: 10 deg/s command averaged only ~3 deg/s physically;
+      # 15 deg/s reached ~9-11 deg/s. Prefer that stronger response for the
+      # final correction; retain the lower collision-checked option for a
+      # tight stopping corridor. Neither setting bypasses the smoother.
+      preferred_min_angular_speed: 0.27
+      min_angular_speed: 0.18
+      # Stop ahead using measured yaw and smoother ramp time, then settle.
+      # This controller estimate does not shorten collision-check latency.
+      turn_stop_latency: 0.25
+      heading_exit_threshold: 0.025
+      lookahead_distance: 0.85
+      # Follow the planner's straight edges directly, preserving real corners.
+      segment_capture: 0.08
+      max_segment_drift: 0.25
+      # Recheck the actual forward corridor throughout each leg; stop/replan
+      # before drifting into the wall, even below the absolute drift limit.
+      straight_clearance_margin: 0.04
+      # Preview at least 1 m, extending with current speed and stopping distance.
+      straight_preview_distance: 1.0
+      goal_adjustment_distance: 0.45
+      goal_adjustment_speed: 0.10
+      xy_goal_tolerance: 0.12
+      yaw_goal_tolerance: 0.025
+      approach_gain: 0.8
+      turn_gain: 1.8
+      # Swept, filled footprint check: latency hold, candidate motion, then
+      # complete braking. Keep axis limits in sync with velocity_smoother.
+      # 3 Hz costmap + 15 Hz controller + 20 Hz smoother + 10 Hz UDP ticks.
+      odometry_timeout: 0.35
+      cloud_timeout: 0.60
+      # Stop immediately for stale data, retain the action for a brief outage.
+      # Keep in sync with NavigationSupervisor.sensor_gap_grace.
+      input_pause_timeout: 3.0
+      collision_reaction_time: 0.65
+      collision_horizon: 1.0
+      collision_acceleration: [1.00, 0.40, 0.80]
+      collision_deceleration: [0.75, 0.20, 0.90]
+
+# Keep saved geometry separate from the live layer. Live clearing must not
+# erase known walls, and departed dynamic obstacles must not remain forever.
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      # Project both costmaps onto the same map XY plane. A 3D map->odom
+      # correction can put odom z=0 far below the saved map and shift tilted
+      # obstacle columns relative to the global planner's projection.
+      global_frame: map
+      robot_base_frame: base_link
+      transform_tolerance: 0.20
+      rolling_window: true
+      width: 12
+      height: 12
+      resolution: 0.10
+      footprint: "[[0.30, 0.225], [0.30, -0.225], [-0.30, -0.225], [-0.30, 0.225]]"
+      plugins: [map_layer, obstacle_layer, inflation_layer]
+      map_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        # Keep occupied cells even when the rasterized footprint overlaps.
+        footprint_clearing_enabled: false
+        min_obstacle_height: -100.0
+        max_obstacle_height: 100.0
+        observation_sources: map_points
+        map_points:
+          topic: /nav_map_points
+          data_type: PointCloud2
+          marking: true
+          clearing: false
+          # Static cloud origin is map origin, not a sensor. Include all map
+          # points; the rolling costmap clips them to its own window.
+          obstacle_max_range: 1000.0
+          min_obstacle_height: -100.0
+          max_obstacle_height: 100.0
+      obstacle_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        # Self points are removed before rasterization. Clearing footprint
+        # cells again can erase real obstacles just outside the body.
+        footprint_clearing_enabled: false
+        min_obstacle_height: -100.0
+        max_obstacle_height: 100.0
+        observation_sources: points
+        points:
+          topic: /nav_body_points
+          data_type: PointCloud2
+          marking: true
+          clearing: true
+          obstacle_max_range: 12.0
+          raytrace_max_range: 14.0
+          # Height is already filtered relative to the floor in map frame.
+          # Do not apply a second absolute-z filter in the costmaps.
+          min_obstacle_height: -100.0
+          max_obstacle_height: 100.0
+          obstacle_min_range: 0.0
+          raytrace_min_range: 0.0
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.35
+        cost_scaling_factor: 5.0
+      always_send_full_costmap: false
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      use_sim_time: false
+      update_frequency: 2.0
+      publish_frequency: 1.0
+      global_frame: map
+      robot_base_frame: base_link
+      transform_tolerance: 0.20
+      rolling_window: true
+      width: 60
+      height: 60
+      resolution: 0.15
+      footprint: "[[0.30, 0.225], [0.30, -0.225], [-0.30, -0.225], [-0.30, 0.225]]"
+      track_unknown_space: false
+      plugins: [map_layer, obstacle_layer, inflation_layer]
+      map_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        footprint_clearing_enabled: false
+        min_obstacle_height: -100.0
+        max_obstacle_height: 100.0
+        observation_sources: map_points
+        map_points:
+          topic: /nav_map_points
+          data_type: PointCloud2
+          marking: true
+          clearing: false
+          obstacle_max_range: 1000.0
+          min_obstacle_height: -100.0
+          max_obstacle_height: 100.0
+      obstacle_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        footprint_clearing_enabled: false
+        min_obstacle_height: -100.0
+        max_obstacle_height: 100.0
+        observation_sources: points
+        points:
+          topic: /nav_body_points
+          data_type: PointCloud2
+          marking: true
+          clearing: true
+          obstacle_max_range: 18.0
+          raytrace_max_range: 20.0
+          min_obstacle_height: -100.0
+          max_obstacle_height: 100.0
+          obstacle_min_range: 0.0
+          raytrace_min_range: 0.0
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.35
+        cost_scaling_factor: 5.0
+      always_send_full_costmap: false
+
+planner_server:
+  ros__parameters:
+    use_sim_time: false
+    expected_planner_frequency: 1.0
+    planner_plugins: [GridBased]
+    GridBased:
+      # Theta* is available in this embedded Nav2 bundle without pulling in
+      # the missing OMPL runtime used by Smac.  It gives shorter, less jagged
+      # grid paths than NavFn while preserving deterministic CPU usage.
+      # Prefer room for tracking error, including when simplifying to long
+      # straight legs. The public obstacle inflation remains 0.35 m.
+      plugin: lightweight_fusion_bringup::PolylineThetaStarPlanner
+      # ThetaStar has no tolerance parameter in this installed version.
+      # Reject invalid targets explicitly rather than imply goal snapping.
+      allow_unknown: false
+      w_euc_cost: 1.0
+      w_traversal_cost: 5.0
+      preferred_obstacle_distance: 0.90
+      tracking_clearance_margin: 0.06
+      how_many_corners: 8
+
+smoother_server:
+  ros__parameters:
+    use_sim_time: false
+    smoother_plugins: [simple_smoother]
+    simple_smoother:
+      plugin: lightweight_fusion_bringup::DensePathSmoother
+      resample_spacing: 0.05
+      minimum_intervals: 32
+      # Reduce attachment to Theta* grid bends while preserving endpoints.
+      # SmoothPath still validates the result against the full footprint.
+      w_data: 0.02
+      w_smooth: 0.45
+      tolerance: 1.0e-7
+      max_its: 1000
+      do_refinement: true
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map
+    robot_base_frame: base_link
+    cycle_frequency: 5.0
+    # Recovery behaviors that publish directly to /cmd_vel caused reverse or
+    # in-place motions after a controller failure.  Keep recovery passive so
+    # an obstructed goal stops and replans instead of moving autonomously.
+    behavior_plugins: [wait]
+    wait: {plugin: nav2_behaviors/Wait}
+    simulate_ahead_time: 1.0
+    max_rotational_vel: 0.60
+    min_rotational_vel: 0.0
+    rotational_acc_lim: 0.80
+
+waypoint_follower:
+  ros__parameters:
+    use_sim_time: false
+    loop_rate: 5
+    stop_on_failure: false
+
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: false
+    smoothing_frequency: 20.0
+    scale_velocities: true
+    # Keep command-based smoothing: predicted odometry twist is derived from
+    # localization and is not wheel velocity feedback.
+    feedback: OPEN_LOOP
+    # This output (/cmd_vel) feeds the chassis. Lateral corrections are
+    # bounded separately from forward speed.
+    deadband_velocity: [0.01, 0.003, 0.01]
+    max_velocity: [0.80, 0.30, 0.60]
+    min_velocity: [-0.10, -0.30, -0.60]
+    max_accel: [1.00, 0.40, 0.80]
+    max_decel: [-0.75, -0.20, -0.90]
+    odom_topic: /nav_predicted_odom
+    odom_duration: 0.2
+    velocity_timeout: 0.5

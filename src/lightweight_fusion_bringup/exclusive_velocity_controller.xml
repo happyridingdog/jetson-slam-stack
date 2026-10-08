@@ -1,0 +1,6 @@
+<library path="exclusive_velocity_controller">
+  <class type="lightweight_fusion_bringup::ExclusiveVelocityController"
+         base_class_type="nav2_core::Controller">
+    <description>Direct mutually-exclusive vx/vy or angular velocity controller.</description>
+  </class>
+</library>

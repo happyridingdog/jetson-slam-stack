@@ -1,0 +1,5 @@
+<library path="polyline_theta_star_planner">
+  <class type="lightweight_fusion_bringup::PolylineThetaStarPlanner" base_class_type="nav2_core::GlobalPlanner">
+    <description>Theta* with footprint-checked straight shortcuts and no curve smoothing.</description>
+  </class>
+</library>

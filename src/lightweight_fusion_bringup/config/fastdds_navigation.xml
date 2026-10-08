@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Local navigation carries full maps, scans and 200 Hz IMU concurrently.
+     Bound capacity explicitly to avoid reliable-reader head-of-line stalls.
+     UDP remains available for discovery and remote RViz/ROS participants. -->
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <transport_descriptors>
+    <transport_descriptor>
+      <transport_id>navigation_shm</transport_id>
+      <type>SHM</type>
+      <segment_size>16777216</segment_size>
+      <port_queue_capacity>4096</port_queue_capacity>
+    </transport_descriptor>
+    <transport_descriptor>
+      <transport_id>navigation_udp</transport_id>
+      <type>UDPv4</type>
+    </transport_descriptor>
+  </transport_descriptors>
+  <participant profile_name="navigation_participant" is_default_profile="true">
+    <rtps>
+      <userTransports>
+        <transport_id>navigation_shm</transport_id>
+        <transport_id>navigation_udp</transport_id>
+      </userTransports>
+      <useBuiltinTransports>false</useBuiltinTransports>
+    </rtps>
+  </participant>
+</profiles>

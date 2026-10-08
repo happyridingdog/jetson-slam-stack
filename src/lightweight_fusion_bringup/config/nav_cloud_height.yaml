@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    # Both live and saved obstacle clouds are filtered against this same plane.
+    # The full 3D map used for localization and RViz is never modified.
+    height_filter_frame: map
+    # Current indoor map floor near the mapping origin is approximately -0.35 m.
+    # Fit its small tilt from well-supported floor returns; fail closed otherwise.
+    ground_seed_z: -0.35
+    # Share supported local floor corrections between saved-map and live scans.
+    # Reconstructed floor patches need not lie on one exact global plane.
+    local_ground_enabled: true
+    min_height_above_ground: 0.08
+    # Retain a conservative ceiling until the full loaded vehicle height is known.
+    # Current room roof is ~4.8 m above its floor and is excluded.
+    max_height_above_ground: 2.0

@@ -1,0 +1,27 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RecoveryNode number_of_retries="3" name="RetryWithFreshPlan">
+      <PipelineSequence name="FollowValidReferencePath">
+        <RateController hz="1.0">
+          <Sequence>
+            <RemovePassedGoals input_goals="{goals}" output_goals="{goals}" radius="0.7"/>
+            <Fallback>
+              <Sequence>
+                <Inverter><GlobalUpdatedGoal/></Inverter>
+                <IsPathValid path="{path}"/>
+              </Sequence>
+              <Sequence>
+                <ComputePathThroughPoses goals="{goals}" path="{path}" planner_id="GridBased"/>
+              </Sequence>
+            </Fallback>
+          </Sequence>
+        </RateController>
+        <FollowPath path="{path}" controller_id="FollowPath"/>
+      </PipelineSequence>
+      <Sequence>
+        <ResetNavigationPath path="{path}"/>
+        <Wait wait_duration="1"/>
+      </Sequence>
+    </RecoveryNode>
+  </BehaviorTree>
+</root>

@@ -1,0 +1,320 @@
+Panels:
+- Class: rviz_common/Displays
+  Name: Displays
+  Property Tree Widget:
+    Expanded:
+    - /Global Options1
+    - /Navigation obstacle points1
+    - /Navigation local obstacles1
+  Tree Height: 640
+- Class: rviz_cloud_editor/EditorPanel
+  Name: 点云编辑
+Visualization Manager:
+  Class: ''
+  Displays:
+  - Class: rviz_default_plugins/Grid
+    Enabled: true
+    Name: Grid
+    Plane: XY
+    Plane Cell Count: 80
+    Reference Frame: <Fixed Frame>
+    Cell Size: 1
+    Color: 120; 120; 120
+  - Class: rviz_default_plugins/TF
+    Enabled: true
+    Name: TF
+    Frame Timeout: 15
+    Marker Scale: 0.4
+    Show Arrows: true
+    Show Axes: true
+    Show Names: false
+    Update Interval: 0
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: true
+    Name: Navigation obstacle points
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /nav_map_points
+    Decay Time: 0
+    Style: Points
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+    Size (Pixels): 3
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 0
+    Topic:
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /map_points_3d/chunk_0
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 1
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_1
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 2
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_2
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 3
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_3
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 4
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_4
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 5
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_5
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 6
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_6
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Full map chunk 7
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /map_points_3d/chunk_7
+    Decay Time: 0
+    Style: Flat Squares
+    Size (m): 0.014
+    Color Transformer: AxisColor
+    Axis: Z
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: Current Cloud
+    Topic:
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /current_cloud_3d
+    Decay Time: 1
+    Style: Flat Squares
+    Size (m): 0.012
+    Color Transformer: FlatColor
+    Color: 255; 190; 80
+  - Class: rviz_default_plugins/PointCloud2
+    Enabled: false
+    Name: SuperOdom Scan
+    Topic:
+      Depth: 5
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Best Effort
+      Value: /registered_scan
+    Decay Time: 0.5
+    Style: Flat Squares
+    Size (m): 0.015
+    Color Transformer: Intensity
+  - Class: rviz_default_plugins/Path
+    Enabled: true
+    Name: Odometry trail
+    Topic:
+      Depth: 10
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /laser_odom_path
+    Line Style: Lines
+    Line Width: 0.05
+    Color: 40; 230; 120
+    Buffer Length: 1
+  - Class: rviz_default_plugins/Path
+    Name: Navigation tracked path
+    Enabled: true
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /navigation/tracked_path
+    Line Style: Lines
+    Line Width: 0.06
+    Color: 60; 170; 255
+    Buffer Length: 1
+  - Class: rviz_default_plugins/Path
+    Name: Planner raw path (optional)
+    Enabled: false
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /plan
+    Line Style: Lines
+    Line Width: 0.06
+    Color: 130; 130; 130
+    Buffer Length: 1
+  - Class: rviz_default_plugins/Map
+    Name: Navigation local obstacles
+    Enabled: true
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /local_costmap/costmap
+    Update Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /local_costmap/costmap_updates
+    Color Scheme: costmap
+    Alpha: 0.45
+    Draw Behind: false
+    Use Timestamp: false
+  - Class: rviz_default_plugins/Map
+    Name: Navigation global obstacles
+    Enabled: false
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /global_costmap/costmap
+    Update Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /global_costmap/costmap_updates
+    Color Scheme: costmap
+    Alpha: 0.25
+    Draw Behind: false
+    Use Timestamp: false
+  - Class: rviz_default_plugins/Polygon
+    Name: Robot footprint
+    Enabled: true
+    Topic:
+      Depth: 1
+      Durability Policy: Volatile
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /local_costmap/published_footprint
+    Color: 255; 255; 255
+  - Class: rviz_default_plugins/MarkerArray
+    Name: Navigation status
+    Enabled: true
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      History Policy: Keep Last
+      Reliability Policy: Reliable
+      Value: /navigation/status_markers
+  Enabled: true
+  Global Options:
+    Background Color: 30; 30; 30
+    Fixed Frame: map
+    Frame Rate: 3
+  Name: root
+  Tools:
+  - Class: rviz_default_plugins/Interact
+  - Class: rviz_default_plugins/MoveCamera
+  - Class: rviz_default_plugins/Select
+  - Class: rviz_default_plugins/FocusCamera
+  - Class: rviz_default_plugins/Measure
+  - Class: rviz_default_plugins/SetGoal
+    Topic: /goal_pose
+    Topic QoS Durability: Volatile
+    Topic QoS History: Keep Last
+    Topic QoS Reliability: Reliable
+    Topic Queue Size: 10
+  - Class: rviz_default_plugins/SetInitialPose
+    Topic: /initialpose
+    Topic QoS Durability: Volatile
+    Topic QoS History: Keep Last
+    Topic QoS Reliability: Reliable
+    Topic Queue Size: 10
+  - Class: rviz_cloud_editor/EraserTool
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Name: Current View
+      Scale: 25.0
+      Angle: 0.0
+      X: 2.2
+      Y: -0.76
+      Target Frame: <Fixed Frame>
+Window Geometry:
+  Height: 1230
+  Width: 2200
+  X: 30
+  Y: 35

@@ -1,0 +1,4 @@
+<library path="cloud_editor_plugins">
+<class name="rviz_cloud_editor/EraserTool" type="rviz_cloud_editor::EraserTool" base_class_type="rviz_common::Tool"><description>Paint away static map points, with undo and separate PCD export.</description></class>
+<class name="rviz_cloud_editor/EditorPanel" type="rviz_cloud_editor::EditorPanel" base_class_type="rviz_common::Panel"><description>Cloud eraser controls and status.</description></class>
+</library>

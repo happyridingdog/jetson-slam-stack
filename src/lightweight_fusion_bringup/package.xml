@@ -2,7 +2,7 @@
 <package format="3">
   <name>lightweight_fusion_bringup</name>
   <version>0.1.0</version>
-  <description>LiDAR-inertial pose graph mapping and global localization.</description>
+  <description>LiDAR-inertial mapping, global localization, and point-cloud navigation.</description>
   <maintainer email="jszr@example.com">jszr</maintainer>
   <license>Apache-2.0</license>
 
@@ -13,14 +13,36 @@
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
   <depend>pcl_conversions</depend>
   <depend>tf2</depend>
   <depend>tf2_eigen</depend>
   <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>nav2_core</depend>
+  <depend>behaviortree_cpp_v3</depend>
+  <depend>nav2_costmap_2d</depend>
+  <depend>nav2_smoother</depend>
+  <depend>nav2_theta_star_planner</depend>
+  <depend>pluginlib</depend>
   <depend>fast_gicp</depend>
   <build_depend>libpcl-all-dev</build_depend>
   <build_depend>gtsam</build_depend>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>nav2_msgs</exec_depend>
+  <exec_depend>action_msgs</exec_depend>
+  <exec_depend>lifecycle_msgs</exec_depend>
+  <exec_depend>rcl_interfaces</exec_depend>
+  <exec_depend>sensor_msgs_py</exec_depend>
+  <exec_depend>tf2_sensor_msgs</exec_depend>
+  <exec_depend>nav2_common</exec_depend>
+  <exec_depend>nav2_lifecycle_manager</exec_depend>
+  <exec_depend>rclcpp_components</exec_depend>
+  <exec_depend>rviz_cloud_editor</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
   <exec_depend>super_odometry</exec_depend>
   <exec_depend>super_odometry_msgs</exec_depend>
   <exec_depend>robot_slam</exec_depend>
@@ -28,6 +50,8 @@
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>rviz2</exec_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
 
   <export><build_type>ament_cmake</build_type></export>
 </package>

@@ -1,0 +1,5 @@
+<library path="dense_path_smoother">
+  <class type="lightweight_fusion_bringup::DensePathSmoother" base_class_type="nav2_core::Smoother">
+    <description>Resample sparse paths before collision-checked Nav2 smoothing.</description>
+  </class>
+</library>
